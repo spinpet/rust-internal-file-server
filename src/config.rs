@@ -34,6 +34,8 @@ pub struct DatabaseConfig {
 pub struct StorageConfig {
     #[serde(default = "default_storage_path")]
     pub path: PathBuf,
+    #[serde(default = "default_storage_path")]
+    pub upload_dir: PathBuf,
     #[serde(default = "default_max_file_size")]
     pub max_file_size: u64,
     #[serde(default = "default_chunk_size")]
@@ -50,8 +52,13 @@ pub struct VideoConfig {
 
 impl Config {
     pub fn load() -> Result<Self> {
+        // 从默认配置开始
+        let default_config = Config::default();
+        
         let settings = config::Config::builder()
-            .add_source(config::Environment::with_prefix("FILE_SERVER"))
+            // 首先加载默认值
+            .add_source(config::Config::try_from(&default_config).map_err(ServerError::from)?)
+            .add_source(config::Environment::with_prefix("FILE_SERVER").separator("_"))
             .add_source(config::File::with_name("config.toml").required(false))
             .build()
             .map_err(ServerError::from)?;
@@ -86,6 +93,12 @@ impl Config {
 
     pub fn server_address(&self) -> String {
         format!("{}:{}", self.server.address, self.server.port)
+    }
+}
+
+impl DatabaseConfig {
+    pub fn database_url(&self) -> String {
+        self.url.clone()
     }
 }
 
@@ -124,6 +137,7 @@ impl Default for StorageConfig {
     fn default() -> Self {
         Self {
             path: default_storage_path(),
+            upload_dir: default_storage_path(),
             max_file_size: default_max_file_size(),
             chunk_size: default_chunk_size(),
         }

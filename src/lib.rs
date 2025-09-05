@@ -100,4 +100,36 @@ mod tests {
             assert!(stored_name_no_ext.len() > 10);
         });
     }
+
+    #[tokio::test]
+    async fn test_server_config_validation() {
+        let config = Config::default();
+        
+        // 验证默认配置是有效的
+        let server_address = config.server_address();
+        assert_eq!(server_address, "0.0.0.0:3000");
+        
+        // 验证数据库URL
+        let db_url = config.database.database_url();
+        assert_eq!(db_url, "sqlite:./files.db");
+        
+        // 验证存储配置
+        assert!(config.storage.max_file_size > 0);
+        assert!(config.storage.chunk_size > 0);
+    }
+
+    #[tokio::test]
+    async fn test_api_response_structure() {
+        use crate::server::ApiResponse;
+        
+        let success_response: ApiResponse<String> = ApiResponse::success("test data".to_string());
+        assert!(success_response.success);
+        assert!(success_response.data.is_some());
+        assert!(success_response.error.is_none());
+        
+        let error_response: ApiResponse<()> = ApiResponse::error("test error".to_string());
+        assert!(!error_response.success);
+        assert!(error_response.data.is_none());
+        assert!(error_response.error.is_some());
+    }
 }
