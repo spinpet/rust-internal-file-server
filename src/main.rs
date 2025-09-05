@@ -1,7 +1,7 @@
 use rust_internal_file_server::config::Config;
 use rust_internal_file_server::server::start_server;
 use rust_internal_file_server::Result;
-use tracing::{info, error};
+use tracing::info;
 use tracing_subscriber;
 
 #[tokio::main]

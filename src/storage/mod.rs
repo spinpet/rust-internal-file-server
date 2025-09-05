@@ -3,5 +3,5 @@
 pub mod file_manager;
 pub mod metadata;
 
-pub use file_manager::FileManager;
+pub use file_manager::{FileManager, FileRecord, FileStats};
 pub use metadata::FileMetadata;

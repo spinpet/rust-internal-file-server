@@ -3,12 +3,11 @@ use crate::error::ServerError;
 use axum::{
     Router,
     response::Json,
-    http::StatusCode,
     routing::get,
 };
 use serde_json::{json, Value};
 use tower_http::cors::CorsLayer;
-use tracing::{info, error};
+use tracing::info;
 
 type Result<T> = std::result::Result<T, ServerError>;
 
@@ -32,7 +31,7 @@ pub async fn start_server(config: Config) -> Result<()> {
     Ok(())
 }
 
-async fn create_router(config: Config) -> Result<Router> {
+async fn create_router(_config: Config) -> Result<Router> {
     let app = Router::new()
         .route("/", get(health_check))
         .route("/health", get(health_check))
