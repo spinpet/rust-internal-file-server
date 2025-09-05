@@ -1,0 +1,2 @@
+fn() -> impl Future<Output = std::result::Result<axum::Json<JsonValue>, ServerError>> {health_check}
+fn() -> impl Future<Output = std::result::Result<axum::Json<JsonValue>, ServerError>> {health_check}: Handler<_, _>

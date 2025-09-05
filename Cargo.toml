@@ -1,0 +1,49 @@
+[package]
+name = "rust-internal-file-server"
+version = "0.1.0"
+edition = "2021"
+description = "基于Rust的内网文件共享服务器，支持大文件存储和在线视频播放"
+license = "MIT"
+authors = ["spinpet"]
+
+[dependencies]
+# Web框架和异步运行时
+tokio = { version = "1.0", features = ["full"] }
+axum = { version = "0.7", features = ["multipart", "macros"] }
+tower = { version = "0.4", features = ["util"] }
+tower-http = { version = "0.5", features = ["fs", "cors", "trace"] }
+hyper = { version = "1.0", features = ["full"] }
+
+# 序列化和反序列化
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# 数据库和存储
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "sqlite", "chrono"] }
+
+# 配置管理
+config = "0.14"
+clap = { version = "4.0", features = ["derive"] }
+
+# 错误处理
+anyhow = "1.0"
+thiserror = "1.0"
+
+# 日志和追踪
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# 时间处理
+chrono = { version = "0.4", features = ["serde"] }
+
+# 文件处理和工具
+uuid = { version = "1.0", features = ["v4"] }
+mime = "0.3"
+mime_guess = "2.0"
+
+# 异步文件操作
+futures = "0.3"
+tokio-stream = "0.1"
+
+[dev-dependencies]
+tempfile = "3.0"
